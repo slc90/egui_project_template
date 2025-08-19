@@ -1,17 +1,21 @@
-mod config;
+pub mod config;
+pub mod utils;
+
+use config::config::CONFIG;
+use utils::constants::{WINDOW_MIN_HEIGHT, WINDOW_MIN_WIDTH};
 
 fn main() -> eframe::Result {
+    let config = CONFIG.lock().unwrap();
+    let title = &config.window_config.title;
+    let window_width = config.window_config.width;
+    let window_height = config.window_config.height;
     let native_options = eframe::NativeOptions {
         viewport: egui::ViewportBuilder::default()
-            .with_inner_size([400.0, 300.0])
-            .with_min_inner_size([300.0, 220.0]),
+            .with_inner_size([window_width, window_height])
+            .with_min_inner_size([WINDOW_MIN_WIDTH, WINDOW_MIN_HEIGHT]),
         ..Default::default()
     };
-    eframe::run_native(
-        "Bs Toolbox",
-        native_options,
-        Box::new(|_| Ok(Box::new(App))),
-    )
+    eframe::run_native(&title, native_options, Box::new(|_| Ok(Box::new(App))))
 }
 
 struct App;
