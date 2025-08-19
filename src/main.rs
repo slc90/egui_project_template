@@ -1,3 +1,5 @@
+mod config;
+
 fn main() -> eframe::Result {
     let native_options = eframe::NativeOptions {
         viewport: egui::ViewportBuilder::default()
@@ -6,7 +8,7 @@ fn main() -> eframe::Result {
         ..Default::default()
     };
     eframe::run_native(
-        "bs_toolbox",
+        "Bs Toolbox",
         native_options,
         Box::new(|_| Ok(Box::new(App))),
     )
