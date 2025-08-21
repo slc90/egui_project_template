@@ -1,10 +1,13 @@
 pub mod config;
+pub mod logger;
 pub mod utils;
 
-use config::config::CONFIG;
-use utils::constants::{WINDOW_MIN_HEIGHT, WINDOW_MIN_WIDTH};
+use crate::config::config::CONFIG;
+use crate::logger::subcriber::test_log;
+use crate::utils::constants::{WINDOW_MIN_HEIGHT, WINDOW_MIN_WIDTH};
 
 fn main() -> eframe::Result {
+    test_log();
     let config = CONFIG.lock().unwrap();
     let title = &config.window_config.title;
     let window_width = config.window_config.width;

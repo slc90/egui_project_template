@@ -3,6 +3,7 @@
         "egui",
         "eframe",
         "wgpu",
-        "serde"
+        "serde",
+        "appender"
     ]
 }
