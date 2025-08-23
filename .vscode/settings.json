@@ -4,6 +4,7 @@
         "eframe",
         "wgpu",
         "serde",
-        "appender"
-    ]
+        "appender",
+        "chrono"
+    ],
 }

@@ -2,7 +2,7 @@ use once_cell::sync::Lazy;
 use serde::{Deserialize, Serialize};
 use std::{fs, sync::Mutex};
 
-use crate::config::window_config::WindowConfig;
+use crate::config::{logger_config::LoggerConfig, window_config::WindowConfig};
 
 /// 全局配置单例
 pub static CONFIG: Lazy<Mutex<Config>> = Lazy::new(|| {
@@ -15,4 +15,7 @@ pub static CONFIG: Lazy<Mutex<Config>> = Lazy::new(|| {
 pub struct Config {
     /// 窗口相关配置
     pub window_config: WindowConfig,
+
+    /// 日志相关配置
+    pub logger_config: LoggerConfig,
 }

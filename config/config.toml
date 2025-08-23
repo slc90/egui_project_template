@@ -2,3 +2,6 @@
 title = "BS Toolbox"
 width = 1920
 height = 1080
+
+[logger_config]
+is_record_only_main_program_log = true
