@@ -8,7 +8,7 @@ use tracing::info;
 use crate::config::config::CONFIG;
 use crate::logger::init_log;
 use crate::ui::fonts::add_font;
-use crate::ui::main_window::MainWindow;
+use crate::ui::main_window::MainWindowState;
 use crate::utils::constants::{WINDOW_MIN_HEIGHT, WINDOW_MIN_WIDTH};
 
 fn main() -> eframe::Result {
@@ -27,7 +27,7 @@ fn main() -> eframe::Result {
         native_options,
         Box::new(|cc| {
             add_font(&cc.egui_ctx);
-            Ok(Box::new(MainWindow))
+            Ok(Box::new(MainWindowState::default()))
         }),
     )
 }

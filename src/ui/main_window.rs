@@ -2,12 +2,18 @@ use egui::{CentralPanel, SidePanel, TopBottomPanel};
 use tracing::info;
 
 use crate::ui::{
-    central_area::show_central_area, left_panel::show_left_panel, menu_bar::show_menu_bar,
+    central_area::{CentralAreaState, show_central_area},
+    left_panel::show_left_panel,
+    menu_bar::show_menu_bar,
 };
 
-pub struct MainWindow;
+/// 主窗口需要管理的状态
+#[derive(Default)]
+pub struct MainWindowState {
+    pub central_area_state: CentralAreaState,
+}
 
-impl eframe::App for MainWindow {
+impl eframe::App for MainWindowState {
     fn update(&mut self, ctx: &egui::Context, _frame: &mut eframe::Frame) {
         //顶部是菜单栏
         TopBottomPanel::top("top_panel")
@@ -19,11 +25,11 @@ impl eframe::App for MainWindow {
         SidePanel::left("left_panel")
             .resizable(false)
             .show(ctx, |ui| {
-                show_left_panel(ctx, ui);
+                show_left_panel(ctx, ui, &mut self.central_area_state);
             });
         //中间放主功能区
         CentralPanel::default().show(ctx, |ui| {
-            show_central_area(ctx, ui);
+            show_central_area(ctx, ui, &self.central_area_state);
         });
     }
 

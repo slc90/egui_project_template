@@ -1,12 +1,19 @@
-use egui::{Context, Ui};
+use egui::{Button, Context, Ui, Vec2};
+use strum::IntoEnumIterator;
 
-use crate::ui::central_area::CentralAreaFunctions;
+use crate::ui::central_area::{CentralAreaFunctions, CentralAreaState};
 
-pub fn show_left_panel(_ctx: &Context, ui: &mut Ui) {
-    if ui.button(CentralAreaFunctions::Home.to_string()).clicked() {}
-    if ui
-        .button(CentralAreaFunctions::ConfigSetting.to_string())
-        .clicked()
-    {}
-    if ui.button(CentralAreaFunctions::About.to_string()).clicked() {}
+pub fn show_left_panel(_ctx: &Context, ui: &mut Ui, central_area_state: &mut CentralAreaState) {
+    ui.vertical_centered_justified(|ui| {
+        for function in CentralAreaFunctions::iter() {
+            {
+                if ui
+                    .add(Button::new(function.to_string()).min_size(Vec2::new(0.0, 50.0)))
+                    .clicked()
+                {
+                    central_area_state.current_function = function
+                }
+            }
+        }
+    });
 }
