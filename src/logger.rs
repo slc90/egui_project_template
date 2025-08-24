@@ -119,6 +119,7 @@ impl FormatTime for LocalTimer {
 /// let console_layer = init_console_log();
 /// tracing_subscriber::registry().with(console_log)
 /// ```
+#[cfg(debug_assertions)]
 fn init_console_log<T>(is_record_only_main_program_log: bool) -> impl Layer<T>
 where
     T: Subscriber + for<'a> LookupSpan<'a>,
