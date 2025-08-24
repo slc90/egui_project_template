@@ -16,4 +16,4 @@ pub const DEFAULT_CONFIG_PATH: &str = "config/default_config.toml";
 /// 首先使用的配置路径,如果这不到就使用上面的默认配置
 /// 在程序中修改配置中的属性后保存到的也是这个路径
 /// 不要去修改上面的默认配置
-pub const CONFIG_PATH: &str = "config/config.toml";
+pub const CONFIG_PATH: &str = "config/real_config.toml";
