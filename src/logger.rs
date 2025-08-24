@@ -3,10 +3,15 @@ use std::{
     path::{Path, PathBuf},
 };
 
+use chrono::Local;
 use tracing::{Level, Metadata, Subscriber};
 use tracing_appender::{non_blocking::WorkerGuard, rolling};
 use tracing_subscriber::{
-    Layer, filter::FilterFn, fmt, layer::SubscriberExt, registry::LookupSpan,
+    Layer,
+    filter::FilterFn,
+    fmt::{self, time::FormatTime},
+    layer::SubscriberExt,
+    registry::LookupSpan,
     util::SubscriberInitExt,
 };
 
@@ -86,6 +91,16 @@ fn create_log_folder() -> PathBuf {
     }
 }
 
+/// 用于日志中时间的格式化
+struct LocalTimer;
+
+impl FormatTime for LocalTimer {
+    fn format_time(&self, w: &mut fmt::format::Writer<'_>) -> std::fmt::Result {
+        let now = Local::now();
+        write!(w, "{}", now.format("%Y-%m-%d-%H:%M:%S%.3f"))
+    }
+}
+
 /// 初始化控制台log,输出Debug级别以上的log(不输出Trace级别,太多了)
 ///
 /// # Arguments
@@ -109,11 +124,12 @@ where
     T: Subscriber + for<'a> LookupSpan<'a>,
 {
     let console_layer = fmt::layer()
+        .with_timer(LocalTimer)
         .with_target(true)
         .with_line_number(true)
         .with_thread_names(true)
         .with_filter(FilterFn::new(move |metadata| {
-            console_log_filter_function(is_record_only_main_program_log, metadata)
+            log_filter_function(is_record_only_main_program_log, &Level::DEBUG, &metadata)
         }));
     console_layer
 }
@@ -150,50 +166,20 @@ where
     let file_appender = rolling::never(path, level.to_string() + ".log");
     let (writer, _guard) = tracing_appender::non_blocking(file_appender);
     let layer = fmt::layer()
+        .with_target(true)
+        .with_line_number(true)
+        .with_thread_names(true)
+        .with_timer(LocalTimer)
         .with_writer(writer)
         .with_ansi(false)
         .with_filter(FilterFn::new(move |metadata| {
-            file_log_filter_function(is_record_only_main_program_log, &level, &metadata)
+            log_filter_function(is_record_only_main_program_log, &level, &metadata)
         }));
     (layer, _guard)
 }
 
-/// console使用的日志过滤函数
-///
-/// # Arguments
-///
-/// - `is_record_only_main_program_log` (`bool`) - 是否只记录主程序的Log
-/// - `metadata` (`&Metadata<'_>`) - 闭包传进来的参数
-///
-/// # Returns
-///
-/// - `bool` - Describe the return value.
-///
-/// # Examples
-///
-/// ```
-/// use crate::...;
-///
-/// let _ = console_log_filter_function();
-/// ```
-fn console_log_filter_function(
-    is_record_only_main_program_log: bool,
-    metadata: &Metadata<'_>,
-) -> bool {
-    let meta_level = metadata.level();
-    if is_record_only_main_program_log {
-        //获取主程序自己的crate名称,用于过滤掉三方库
-        let crate_name: &str = env!("CARGO_PKG_NAME");
-        //注意这里为了在console中输出DEBUG及以上的日志，要用 <= ,
-        //详细见 https://docs.rs/tracing/latest/tracing/struct.Level.html#method.le
-        metadata.target().starts_with(crate_name) && meta_level <= &Level::DEBUG
-    } else {
-        meta_level <= &Level::DEBUG
-    }
-}
-
 /// 文件日志过滤用的函数
-///
+/// 满足条件的日志才会被记录
 /// # Arguments
 ///
 /// - `is_record_only_main_program_log` (`bool`) - 是否只记录主程序的Log
@@ -203,9 +189,7 @@ fn console_log_filter_function(
 /// # Returns
 ///
 /// - `bool` -
-///
-/// ```
-fn file_log_filter_function(
+fn log_filter_function(
     is_record_only_main_program_log: bool,
     level: &Level,
     metadata: &Metadata<'_>,
@@ -213,9 +197,10 @@ fn file_log_filter_function(
     let meta_level: &Level = metadata.level();
     if is_record_only_main_program_log {
         //获取主程序自己的crate名称,用于过滤掉三方库
+        //注意这里要用 <= ,详细见 https://docs.rs/tracing/latest/tracing/struct.Level.html#method.le
         let crate_name: &str = env!("CARGO_PKG_NAME");
-        metadata.target().starts_with(crate_name) && meta_level == level
+        metadata.target().starts_with(crate_name) && meta_level <= level
     } else {
-        meta_level == level
+        meta_level <= level
     }
 }
