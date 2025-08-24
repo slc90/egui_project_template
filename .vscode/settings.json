@@ -5,6 +5,7 @@
         "wgpu",
         "serde",
         "appender",
-        "chrono"
+        "chrono",
+        "epaint"
     ],
 }

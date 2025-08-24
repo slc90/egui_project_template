@@ -3,3 +3,6 @@ pub const WINDOW_MIN_WIDTH: f32 = 1920.0;
 
 /// 窗口最小高度
 pub const WINDOW_MIN_HEIGHT: f32 = 1080.0;
+
+/// 字体名称
+pub const FONT_NAME: &str = "SmileySans-Oblique";
