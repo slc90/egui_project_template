@@ -15,7 +15,7 @@ use tracing_subscriber::{
     util::SubscriberInitExt,
 };
 
-use crate::utils::utils::get_current_time_format_string;
+use crate::utils::{constants::LOG_FOLDER, utils::get_current_time_format_string};
 
 /// 初始化所有console和file的log,要把word_guard返回并一直用一个变量hold住
 ///
@@ -84,7 +84,7 @@ pub fn init_log(is_record_only_main_program_log: bool) -> [WorkerGuard; 3] {
 /// ```
 fn create_log_folder() -> PathBuf {
     let current_time = get_current_time_format_string();
-    let current_log_folder = Path::new("logs").join(current_time);
+    let current_log_folder = Path::new(LOG_FOLDER).join(current_time);
     match fs::create_dir_all(&current_log_folder) {
         Ok(_) => current_log_folder,
         Err(err) => panic!("创建log文件夹失败,路径{current_log_folder:?},原因:{err}"),

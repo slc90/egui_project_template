@@ -22,8 +22,11 @@ fn main() -> eframe::Result {
         centered: true,
         ..Default::default()
     };
+    let window_title = config.window_config.title.clone();
+    // 不要一直持有锁，不然UI线程中别的地方再次获取全局配置时，就会死锁
+    drop(config);
     eframe::run_native(
-        &config.window_config.title,
+        &window_title,
         native_options,
         Box::new(|cc| {
             add_font(&cc.egui_ctx);

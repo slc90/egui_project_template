@@ -1,0 +1,16 @@
+# 主窗口相关配置
+[window_config]
+title = "BS Toolbox"
+# 窗口最小宽度为1920,设置比这小就还是使用1920
+width = 1920
+# 窗口最小高度为1080,设置比这小就还是使用1080
+height = 1080
+
+# 日志配置
+[logger_config]
+# 是否只记录当前程序，不记录三方库的日志
+is_record_only_main_program_log = true
+
+# 使用的语言 Chinese 或 English
+[language_config]
+language = "Chinese"

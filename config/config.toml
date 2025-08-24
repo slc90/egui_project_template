@@ -1,10 +1,10 @@
-# 主窗口相关配置
 [window_config]
 title = "BS Toolbox"
-width = 1920
-height = 1080
+width = 1920.0
+height = 1080.0
 
-# 日志配置
 [logger_config]
-# 是否只记录当前程序，不记录三方库的日志
 is_record_only_main_program_log = true
+
+[language_config]
+language = "Chinese"

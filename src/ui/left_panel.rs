@@ -8,7 +8,11 @@ pub fn show_left_panel(_ctx: &Context, ui: &mut Ui, central_area_state: &mut Cen
         for function in CentralAreaFunctions::iter() {
             {
                 if ui
-                    .add(Button::new(function.to_string()).min_size(Vec2::new(0.0, 50.0)))
+                    .add(
+                        Button::new(function.to_string())
+                            .corner_radius(4)
+                            .min_size(Vec2::new(0.0, 50.0)),
+                    )
                     .clicked()
                 {
                     central_area_state.current_function = function
