@@ -1,7 +1,7 @@
 use egui::{CentralPanel, SidePanel, TopBottomPanel};
 use singlyton::SingletonUninit;
 use tokio::sync::mpsc::{Receiver, Sender, error::TryRecvError};
-use tracing::info;
+use tracing::{debug, info};
 
 use crate::ui::{
     central_area::{CentralAreaState, show_central_area},
@@ -47,7 +47,7 @@ impl eframe::App for MainWindowState {
         //每次重绘Ui前接收一下后台线程传过来的消息
         match RECEIVE_BACKGROUND_MESSAGE.get_mut().try_recv() {
             Ok(result) => {
-                println!("background result:{}", result);
+                debug!("background result:{}", result);
                 //根据这个结果对Ui的state作响应修改
             }
             Err(e) => match e {

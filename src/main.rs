@@ -30,8 +30,10 @@ fn main() -> eframe::Result {
     SEND_TO_UI.init(send_to_ui);
     RECEIVE_UI_MESSAGE.init(receive_ui_message);
     // 启动后台任务
-    task::spawn(async move { background_manager::manager::background_task_dispatcher().await });
-
+    task::spawn(async move {
+        background_manager::manager::background_task_dispatcher().await;
+    });
+    // 启动UI
     let native_options = eframe::NativeOptions {
         viewport: egui::ViewportBuilder::default()
             .with_inner_size([config.window_config.width, config.window_config.height])
