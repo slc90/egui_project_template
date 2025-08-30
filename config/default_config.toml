@@ -1,6 +1,6 @@
 # 主窗口相关配置
 [window_config]
-title = "BS Toolbox"
+title = "egui_project_template"
 # 窗口最小宽度为1920,设置比这小就还是使用1920
 width = 1920
 # 窗口最小高度为1080,设置比这小就还是使用1080

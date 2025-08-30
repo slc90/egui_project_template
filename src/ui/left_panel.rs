@@ -1,11 +1,14 @@
 use egui::{Button, Context, Ui, Vec2};
 use strum::IntoEnumIterator;
 
-use crate::ui::central_area::{CentralAreaFunctions, CentralAreaState};
+use crate::ui::{
+    central_area::{CentralAreaFunctions, CentralAreaState},
+    main_window::send_to_background,
+};
 
 pub fn show_left_panel(_ctx: &Context, ui: &mut Ui, central_area_state: &mut CentralAreaState) {
     ui.vertical_centered_justified(|ui| {
-        for function in CentralAreaFunctions::iter() {
+        for (i, function) in CentralAreaFunctions::iter().enumerate() {
             {
                 if ui
                     .add(
@@ -15,7 +18,8 @@ pub fn show_left_panel(_ctx: &Context, ui: &mut Ui, central_area_state: &mut Cen
                     )
                     .clicked()
                 {
-                    central_area_state.current_function = function
+                    central_area_state.current_function = function;
+                    send_to_background(i as i64);
                 }
             }
         }
