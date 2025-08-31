@@ -1,3 +1,6 @@
+#[cfg(test)]
+use mockall::{automock, predicate::*};
+
 use chrono::Local;
 
 /// 获取当前时间，转化为字符串，格式为 年-月-日-时-分-秒
@@ -26,6 +29,29 @@ pub fn get_current_time_format_string() -> String {
 /// ```
 pub fn add(left: u64, right: u64) -> u64 {
     left + right
+}
+
+/// 只是用于Mock的例子
+///
+/// # Arguments
+///
+/// - `&self` (`undefined`) - Describe this parameter.
+/// - `x` (`u32`) - Describe this parameter.
+///
+/// # Returns
+///
+/// - `u32` - Describe the return value.
+///
+/// # Examples
+///
+/// ```
+/// use crate::...;
+///
+/// let _ = foo();
+/// ```
+#[cfg_attr(test, automock)]
+trait TraitForMock {
+    fn foo(&self, x: u32) -> u32;
 }
 
 #[cfg(test)]
@@ -142,5 +168,12 @@ mod tests {
     #[timeout(Duration::from_millis(80))]
     async fn timeout_example() {
         assert_eq!(4, delayed_sum(2, 2, Duration::from_millis(100)).await);
+    }
+
+    #[test]
+    fn mock_example() {
+        let mut mock = MockTraitForMock::new();
+        mock.expect_foo().with(eq(4)).times(1).returning(|x| x + 1);
+        assert_eq!(5, mock.foo(4));
     }
 }

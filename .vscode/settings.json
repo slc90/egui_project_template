@@ -10,6 +10,8 @@
         "singlyton",
         "Uninit",
         "oneshot",
-        "rstest"
+        "rstest",
+        "kani",
+        "mockall"
     ],
 }
